@@ -1,4 +1,4 @@
-console.log("hello world!");
+// console.log("hello world!");
 
 function sum(param) {
   //TODO: 請從1+2+3+...+param
@@ -7,7 +7,8 @@ function sum(param) {
   for (i = 0; i <= param; i++) {
     n = n + i;
   }
-  console.log(n);
+  // console.log(n);
+  return n;
 }
 
 console.log(sum(6));
