@@ -15,6 +15,10 @@ connection = Promise.promisifyAll(connection);
 
 let app = express(); // application
 
+//cors
+const cors = require("cors");
+app.use(cors());
+
 // app.use 告訴 express 這裡有一個中間件(middleware)
 // middleware 只是一個函式，會有三個參數
 // app.use((req, res, next) => {
@@ -29,6 +33,29 @@ let app = express(); // application
 app.get("/api/todos", async (req, res) => {
   let data = await connection.queryAsync("SELECT * FROM todos");
   res.json(data);
+});
+
+// /api/todos/24
+// 根據 id 取得單筆資料
+app.get("/api/todos/:todoId", async (req, res) => {
+  // req.params.todoId
+  let data = await connection.queryAsync("SELECT * FROM todos WHERE id = ?;", [
+    req.params.todoId,
+  ]);
+
+  // Ａ直接把陣列回給前端
+  // res.json(data);
+  if (data.length > 0) {
+    // Ｂ只回覆一個物件
+    // data.length只會有一個，如果沒有就是撈不到
+    res.json(data[0]);
+  } else {
+    // ? 空的
+    // /api/todos/44
+    // res.send(null);
+    res.status(404).send("Not Found");
+    // 都可以，但是團隊一致
+  }
 });
 
 // app.use((req, res, next) => {
